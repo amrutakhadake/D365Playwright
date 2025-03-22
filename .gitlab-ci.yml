@@ -1,0 +1,49 @@
+variables:
+  SELENIUM_URL: $SELENIUM_URL
+  SELENIUM_BROWSER: $SELENIUM_BROWSER
+  SELENIUM_WAIT: $SELENIUM_WAIT
+  SELENIUM_HEADLESS: $SELENIUM_HEADLESS
+  SELENIUM_GRID_URL: $SELENIUM_GRID_URL
+  API_BASE_URL: $API_BASE_URL
+  DOT_API_TOKEN: $DOT_API_TOKEN
+  DOT_CLI_PROJECT_ID: $DOT_CLI_PROJECT_ID
+  CI_JOB_TOKEN: $CI_JOB_TOKEN
+  BUILD_ID:
+    value: '1.0'
+    description: 'Build id of upload'
+
+stages:
+  - test
+  - report
+
+test:
+  stage: test
+  script:
+    - dotnet restore
+    - dotnet test --test-adapter-path:. --logger:junit
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - TestResults/*.xml
+    paths:
+      - TestResults
+  cache:
+    paths:
+      - TestResults/*.xml
+    when: always
+
+report:
+  stage: report
+  when: always
+  before_script:
+    - python --version ; pip --version
+    - pip install virtualenv
+    - python -m virtualenv venv
+    - source venv/bin/activate
+    - pip install planit --index-url https://gitlab-ci-token:${CI_JOB_TOKEN}@git.planittesting.com/api/v4/projects/${DOT_CLI_PROJECT_ID}/packages/pypi/simple --no-cache-dir  --upgrade --force-reinstall --pre
+  script:
+    - BROWSER_VERSION=$(planit grid browsers -g $SELENIUM_GRID_URL -f "browserName=$SELENIUM_BROWSER" | jq .[0].browserVersion)
+    - echo $BROWSER_VERSION
+    - planit dot upload -d junit -m test-metadata.yaml -t $DOT_API_TOKEN -i $BUILD_ID -b $SELENIUM_BROWSER -v $BROWSER_VERSION TestResults/*.xml
+

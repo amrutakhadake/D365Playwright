@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="NUnit" Version="4.0.1" />
+		<PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+		<PackageReference Include="JunitXml.TestLogger" Version="3.0.134" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="CsvHelper" Version="30.1.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="8.0.0" />
+		<PackageReference Include="SpecFlow" Version="3.9.74" />
+		<PackageReference Include="SpecFlow.Assist.Dynamic" Version="1.4.2" />
+		<PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.9.74" />
+		<PackageReference Include="XunitXml.TestLogger" Version="3.1.17" />
+		<PackageReference Include="SpecFlow.NUnit" Version="3.9.74" />
+    <PackageReference Include="restsharp" Version="110.2.0" />
+    <PackageReference Include="FluentAssertions" Version="6.12.0" />
+    <PackageReference Include="Microsoft.Playwright" Version="1.41.2" />
+    <PackageReference Include="Microsoft.Playwright.NUnit" Version="1.41.2" />
+		<!-- <PackageReference Include="WebDriverManager" Version="2.16.2" /> -->
+	</ItemGroup>
+	<ItemGroup>
+		<None Remove="Specflow_Tests\obj\Specflow_Tests.csproj.nuget.g.targets" />
+		<None Remove="Specflow_Tests\obj\Specflow_Tests.csproj.nuget.cache" />
+		<None Remove="Specflow_Tests\obj\project.assets.json" />
+		<None Remove="Specflow_Tests\obj\Specflow_Tests.csproj.nuget.dgspec.json" />
+		<None Remove="Specflow_Tests\obj\Specflow_Tests.csproj.nuget.g.props" />
+		<None Remove="Specflow_Tests\obj\Debug\netcoreapp3.0\Specflow_Tests.assets.cache" />
+		<None Remove="Specflow_Tests\obj\Debug\netcoreapp3.0\Specflow_Tests.csprojAssemblyReference.cache" />
+	</ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="env.json" Condition="Exists('env.json')">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="BDD\StepArgumentTransformations\" />
+	</ItemGroup>
+</Project>
